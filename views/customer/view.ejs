@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+    <!-- استخدام مسارات مطلقة تبتدئ بـ / لضمان العمل على كافة routes -->
+    <script src="/js/color-modes.js"></script>
+    <link rel="stylesheet" href="/bootstrap-icons-1.10.5/font/bootstrap-icons.min.css" />
+    <link rel="shortcut icon" href="/img/ali.png" type="image/x-icon">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>View Customer</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/dark-light.css">
+    <link href="/css/sidebars.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/myStyle.css" />
+  </head>
+  <body>
+    <%- include('../components/dark-light.ejs') %>
+
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+      <button
+        class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+        id="bd-theme"
+        type="button"
+        aria-expanded="false"
+        data-bs-toggle="dropdown"
+        aria-label="Toggle theme (auto)"
+      >
+        <svg class="bi my-1 theme-icon-active" width="1em" height="1em">
+          <use href="#circle-half"></use>
+        </svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul
+        class="dropdown-menu dropdown-menu-end shadow"
+        aria-labelledby="bd-theme-text"
+      >
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center"
+            data-bs-theme-value="light"
+            aria-pressed="false"
+          >
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
+              <use href="#sun-fill"></use>
+            </svg>
+            Light
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center"
+            data-bs-theme-value="dark"
+            aria-pressed="false"
+          >
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
+              <use href="#moon-stars-fill"></use>
+            </svg>
+            Dark
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center active"
+            data-bs-theme-value="auto"
+            aria-pressed="true"
+          >
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
+              <use href="#circle-half"></use>
+            </svg>
+            Auto
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <main class="d-flex flex-nowrap min-vh-100">
+      <%- include('../components/sidebar.ejs', {currentpage : 'view'}) %>
+
+      <!-- px-md-4 و py-3 تضمن ضبط التهميش بين السايدبار والمحتوى -->
+      <section class="w-100 px-md-4 py-3 bg-body-tertiary">
+        <%- include('../components/navbar.ejs') %>
+
+        <nav class="px-2 mt-4 d-flex flex-wrap justify-content-between align-items-center" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+              <%= obj.firstName %> <%= obj.lastName %>
+            </li>
+          </ol>
+
+          <p class="mb-0">
+            <span class="fw-medium fs-6">Id :</span> <span><%= obj._id %></span>
+          </p>
+        </nav>
+
+        <!-- تغليف الجدول داخل Card لإبرازه بشكل متناسق في Light/Dark Mode -->
+        <div class="card shadow-sm border-0 mt-4">
+          <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" class="w-25 ps-3">First Name</th>
+                  <th class="fw-normal" scope="col"><%= obj.firstName %></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="ps-3">Last Name</th>
+                  <td><%= obj.lastName %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="ps-3">Telephone</th>
+                  <td><%= obj.telephone %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="ps-3">Email</th>
+                  <td><%= obj.email %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="ps-3">Gender</th>
+                  <td><%= obj.gender %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="ps-3">Age</th>
+                  <td><%= obj.age %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="ps-3">Country</th>
+                  <td><%= obj.country %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="ps-3">Created on</th>
+                  <td><%= moment(obj.createdAt).format('MMMM Do YYYY, h:mm:ss a'); %></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="ps-3">Last Update</th>
+                  <td><%= moment(obj.updatedAt).startOf('hour').fromNow(); %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sidebars.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

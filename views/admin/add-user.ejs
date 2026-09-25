@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-bs-theme="auto">
+  <head>
+    <script src="/js/color-modes.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add a new User</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="/css/dark-light.css" />
+    <link rel="stylesheet" href="/css/sidebars.css" />
+  </head>
+  <body>
+    <%- include('../components/dark-light.ejs') %>
+
+    <div class="container-fluid">
+      <div class="row">
+        <%- include('../components/sidebar.ejs') %>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"><i class="bi bi-person-badge-fill text-info me-2"></i>Add a new User</h1>
+          </div>
+
+          <div class="card border-0 shadow-sm rounded-3 col-lg-8 p-4">
+            <form action="/admin/add-user" method="POST" class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required />
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">e-mail</label>
+                <input type="email" name="email" class="form-control" required />
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required />
+              </div>
+
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-info text-white px-4">
+                  <i class="bi bi-plus-circle me-1"></i> Create User
+                </button>
+              </div>
+            </form>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sidebars.js"></script>
+  </body>
+</html>

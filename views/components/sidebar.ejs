@@ -1,0 +1,125 @@
+<div
+  id="sidebarId"
+  class="position-relative d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar"
+>
+  <!-- زر إغلاق الـ Sidebar -->
+  <span style="right: 10px; top: 2px" class="position-absolute">
+    <button class="btn text-white" onclick="toggleSidebar()">
+      <i class="bi bi-x-circle"></i>
+    </button>
+  </span>
+
+  <!-- الشعار / العنوان -->
+  <a
+    href="/"
+    class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+  >
+    <i class="bi bi-lightning-charge fs-4 me-2"></i>
+    <span class="fs-4 sidebar-text">Sidebar</span>
+  </a>
+  
+  <hr />
+
+  <!-- قائمة التنقل -->
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a 
+        href="/" 
+        class="nav-link text-white <%= (typeof currentpage !== 'undefined' && currentpage === 'index') ? 'active' : '' %>" 
+        aria-current="page"
+      >
+        <i class="bi bi-house me-2"></i>
+        <span class="sidebar-text"> Home </span>
+      </a>
+    </li>
+
+    <li>
+      <a 
+        href="/add" 
+        class="nav-link text-white <%= (typeof currentpage !== 'undefined' && currentpage === 'add') ? 'active' : '' %>"
+      >
+        <i class="bi bi-person-plus me-2"></i>
+        <span class="sidebar-text"> Add Customers </span>
+      </a>
+    </li>
+
+    <li class="nav-item">
+  <a href="/users-list" class="nav-link text-white <%= currentpage === 'users-list' ? 'active' : '' %>">
+    <i class="bi bi-people me-2"></i>
+    <span class="sidebar-text"> Users List </span>
+  </a>
+</li>
+
+    <!-- قسم الصلاحيات المخصص حسب المستخدم المسجل -->
+    <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+      
+      <!-- إضافة User (متاحة لـ Extra Admin و Admin) -->
+      <% if (currentUser.role === 'extra_admin' || currentUser.role === 'admin') { %>
+        <li class="nav-item mt-2">
+          <a 
+            href="/admin/add-user" 
+            class="nav-link text-white <%= (typeof currentpage !== 'undefined' && currentpage === 'addUser') ? 'active' : '' %>"
+          >
+            <i class="bi bi-person-badge me-2"></i>
+            <span class="sidebar-text"> Add User </span>
+          </a>
+        </li>
+      <% } %>
+
+      <!-- إضافة Admin (متاحة فقط لـ Extra Admin) -->
+      <% if (currentUser.role === 'extra_admin') { %>
+        <li class="nav-item">
+          <a 
+            href="/admin/add-admin" 
+            class="nav-link text-white <%= (typeof currentpage !== 'undefined' && currentpage === 'addAdmin') ? 'active' : '' %>"
+          >
+            <i class="bi bi-shield-lock me-2"></i>
+            <span class="sidebar-text"> Add Admin </span>
+          </a>
+        </li>
+      <% } %>
+
+    <% } %>
+  </ul>
+
+  <hr />
+
+  <!-- القائمة المنسدلة للبروفايل -->
+  <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+    <div class="dropdown">
+      <a
+        href="#"
+        class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <img
+          src="/img/user.png"
+          alt="User Avatar"
+          width="28"
+          height="28"
+          class="rounded-circle me-2"
+        />
+        <strong class="sidebar-text"><%= currentUser.username %></strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+        <li>
+          <span class="dropdown-item-text text-muted small">
+            Role: <%= currentUser.role %>
+          </span>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li><a class="dropdown-item text-danger" href="/logout">Sign out</a></li>
+      </ul>
+    </div>
+  <% } else { %>
+    <!-- إذا لم يكن مسجلاً للدخول -->
+    <div>
+      <a href="/login" class="btn btn-outline-light w-100">
+        <i class="bi bi-box-arrow-in-right me-1"></i> Sign in
+      </a>
+    </div>
+  <% } %>
+</div>
+
+<div class="b-example-divider b-example-vr"></div>

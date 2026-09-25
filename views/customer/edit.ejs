@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+    <!-- مسارات مطلقة تبدأ بـ / لضمان عملها داخل المسارات الفرعية مثل /edit/id -->
+    <script src="/js/color-modes.js"></script>
+    <link
+      rel="stylesheet"
+      href="/bootstrap-icons-1.10.5/font/bootstrap-icons.min.css"
+    />
+    <link rel="shortcut icon" href="/img/ali.png" type="image/x-icon">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Customer</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/dark-light.css">
+    <link href="/css/sidebars.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/myStyle.css" />
+  </head>
+  <body>
+    <%- include('../components/dark-light.ejs') %>
+
+    <div
+      class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle"
+    >
+      <button
+        class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+        id="bd-theme"
+        type="button"
+        aria-expanded="false"
+        data-bs-toggle="dropdown"
+        aria-label="Toggle theme (auto)"
+      >
+        <svg class="bi my-1 theme-icon-active" width="1em" height="1em">
+          <use href="#circle-half"></use>
+        </svg>
+        <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+      </button>
+      <ul
+        class="dropdown-menu dropdown-menu-end shadow"
+        aria-labelledby="bd-theme-text"
+      >
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center"
+            data-bs-theme-value="light"
+            aria-pressed="false"
+          >
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
+              <use href="#sun-fill"></use>
+            </svg>
+            Light
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center"
+            data-bs-theme-value="dark"
+            aria-pressed="false"
+          >
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
+              <use href="#moon-stars-fill"></use>
+            </svg>
+            Dark
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="dropdown-item d-flex align-items-center active"
+            data-bs-theme-value="auto"
+            aria-pressed="true"
+          >
+            <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em">
+              <use href="#circle-half"></use>
+            </svg>
+            Auto
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <main class="d-flex flex-nowrap min-vh-100">
+      <%- include('../components/sidebar.ejs' , {currentpage : 'edit'} ) %>
+
+      <!-- إضافة bg-body-tertiary و px-md-4 لضبط الحواف والألوان -->
+      <section class="w-100 px-md-4 py-3 bg-body-tertiary">
+        <%- include('../components/navbar.ejs') %>
+
+        <nav class="px-2 mt-4 d-flex flex-wrap justify-content-between align-items-center" aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><%= obj.firstName %> <%= obj.lastName %></li>
+          </ol>
+          <p class="mb-0 me-md-5"> <span class="fw-medium fs-6">Id :</span> <%= obj._id %></p>
+        </nav>
+
+        <!-- تغليف النموذج داخل Card لإبراز عناصر المدخلات بشكل متناسق مع الوضعين -->
+        <div class="card shadow-sm border-0 mt-4 p-4">
+          <form action="/edit/<%= obj._id %>?_method=PUT" method="POST" class="row gx-3 gy-4">
+            
+            <div class="col-md-6">
+              <label for="inputfirstName4" class="form-label">First Name:</label>
+              <input
+                name="firstName"
+                value="<%= obj.firstName %>"
+                placeholder="Ali..."
+                type="text"
+                class="form-control"
+                id="inputfirstName4"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="inputlastName4" class="form-label">Last Name:</label>
+              <input
+                name="lastName"
+                value="<%= obj.lastName %>"
+                placeholder="Hassan..."
+                type="text"
+                class="form-control"
+                id="inputlastName4"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="inputemail4" class="form-label">Email:</label>
+              <input
+                name="email"
+                value="<%= obj.email %>"
+                placeholder="ali@gmail.com"
+                type="email"
+                class="form-control"
+                id="inputemail4"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="inputtele4" class="form-label">Telephone:</label>
+              <input
+                name="telephone"
+                value="<%= obj.telephone %>"
+                placeholder="011987899"
+                type="number"
+                class="form-control"
+                id="inputtele4"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="inputage4" class="form-label">Age:</label>
+              <input
+                name="age"
+                value="<%= obj.age %>"
+                placeholder="Your Age: ..."
+                type="number"
+                class="form-control"
+                id="inputage4"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="inputCountry" class="form-label">Country:</label>
+              <select name="country" id="inputCountry" class="form-select">
+                <option disabled hidden value="">Choose here ...</option>
+    
+                <% if (typeof countries !== 'undefined' && countries) { %>
+                  <% countries.forEach((country) => { %>
+                    <option value="<%= country %>" <%= obj && obj.country === country ? 'selected' : '' %>>
+                      <%= country %>
+                    </option>
+                  <% }) %>
+                <% } %>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="inputGender" class="form-label">Gender:</label>
+              <select name="gender" id="inputGender" class="form-select">
+                <option selected hidden disabled value="">Choose here ...</option>
+                <option value="Male" <%= obj.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                <option value="Female" <%= obj.gender === 'Female' ? 'selected' : '' %>>Female</option>
+              </select>
+            </div>
+
+            <div class="col-12 mt-4">
+              <button type="submit" class="btn btn-primary">
+                Update changes
+              </button>
+
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                type="button"
+                class="btn btn-danger ms-2"
+              >
+                Delete Customer
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </section>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Delete Customer
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">Are you sure you want to continue delete the customer?</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <form action="/edit/<%= obj._id %>?_method=DELETE" method="POST">  
+                <button type="submit" class="btn btn-danger">
+                  Delete
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sidebars.js"></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!-- اجعل data-bs-theme="dark" لتعيين الوضع المظلم افتراضياً، أو استخدم السكريبت لتبديله -->
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manage Users & Admins</title>
+    
+    <!-- ملف سكريبت إدارة الوضع المظلم -->
+    <script src="/js/color-modes.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/bootstrap-icons-1.10.5/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="/css/dark-light.css" />
+    <link rel="stylesheet" href="/css/sidebars.css" />
+    <link rel="stylesheet" href="/css/myStyle.css" />
+  </head>
+  <body>
+    <main class="d-flex flex-nowrap min-vh-100">
+      <!-- تضمين الشريط الجانبي -->
+      <%- include('../components/sidebar.ejs', {currentpage: 'users-list'}) %>
+
+      <!-- الفاصل العمودي -->
+      <div class="b-example-vr"></div>
+
+      <!-- قسم المحتوى الرئيسي يتمدد بعرض الشاشة -->
+      <section class="w-100">
+        <!-- الشريط العلوي -->
+        <%- include('../components/navbar.ejs') %>
+
+        <!-- حاوية واسعة للمحتوى تمتد بعرض الشاشة -->
+        <div class="p-4">
+          <h2 class="mb-4 text-body">Users & Admins Management</h2>
+          
+          <table class="table text-center table-striped table-bordered align-middle">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username / Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (!users || users.length === 0) { %>
+                <tr>
+                  <td colspan="4">No users found.</td>
+                </tr>
+              <% } else { %>
+                <% users.forEach((userItem, index) => { %>
+                  <tr>
+                    <th scope="row"><%= index + 1 %></th>
+                    <td><%= userItem.username || userItem.firstName || userItem.fullName || 'User' %></td>
+                    <td>
+                      <span class="badge <%= userItem.role === 'extra_admin' ? 'bg-danger' : (userItem.role === 'admin' ? 'bg-warning text-dark' : 'bg-secondary') %>">
+                        <%= userItem.role %>
+                      </span>
+                    </td>
+                    <td>
+                      <% 
+                        const loggedInUser = typeof currentUser !== 'undefined' ? currentUser : null;
+                        const userRole = loggedInUser ? loggedInUser.role : null;
+                        const currentUserId = loggedInUser?._id ? loggedInUser._id.toString() : null;
+                        const targetUserId = userItem?._id ? userItem._id.toString() : null;
+
+                        const isNotExtraAdmin = userItem.role !== 'extra_admin';
+                        const isNotSelf = currentUserId ? (currentUserId !== targetUserId) : true;
+                        
+                        const canDelete = isNotExtraAdmin && isNotSelf && (
+                          userRole === 'extra_admin' || 
+                          (userRole === 'admin' && userItem.role === 'user')
+                        );
+                      %>
+
+                      <% if (canDelete) { %>
+                        <form 
+                          style="display: inline;" 
+                          action="/delete-user/<%= userItem._id %>?_method=DELETE" 
+                          method="POST"
+                          onsubmit="return confirm('هل أنت متأكد من مسح هذا الحساب؟');"
+                        >
+                          <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Delete User">
+                            <i class="bi bi-trash"></i> Delete
+                          </button>
+                        </form>
+                      <% } else { %>
+                        <span class="text-secondary fs-7">No Action Permitted</span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>   
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebarId");
+        if (sidebar) {
+          sidebar.classList.toggle("small-sidebar");
+        }
+      }
+    </script>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sidebars.js"></script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-bs-theme="auto">
+  <head>
+    <script src="/js/color-modes.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Log in</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="/css/dark-light.css" />
+  </head>
+  <body class="d-flex align-items-center justify-content-center vh-100 bg-body-tertiary">
+    
+    <%- include('../components/dark-light.ejs') %>
+
+    <main class="form-signin w-100 m-auto" style="max-width: 380px;">
+      <form action="/login" method="POST" class="card p-4 shadow-sm rounded-4 border-0">
+        <div class="text-center mb-4">
+          <i class="bi bi-shield-lock-fill text-primary display-4"></i>
+          <h1 class="h3 mt-2 fw-bold">Log in</h1>
+          <p class="text-body-secondary small">Enter your details to access the dashboard</p>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" required />
+          <label for="floatingInput">Email</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required />
+          <label for="floatingPassword">Password</label>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2 fw-semibold rounded-3" type="submit">
+          دخول <i class="bi bi-box-arrow-in-right ms-1"></i>
+        </button>
+      </form>
+    </main>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
