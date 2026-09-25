@@ -77,14 +77,25 @@ const createInitialExtraAdmin = async () => {
   try {
     const extraAdminExists = await User.findOne({ role: 'extra_admin' });
     if (!extraAdminExists) {
-      const hashedPassword = await bcrypt.hash('extra123', 10);
+      const username = process.env.EXTRA_ADMIN_USERNAME;
+      const email = process.env.EXTRA_ADMIN_EMAIL;
+      const rawPassword = process.env.EXTRA_ADMIN_PASSWORD;
+
+      if (!username || !email || !rawPassword) {
+        console.warn('⚠️ لم يتم إنشاء Extra Admin: يرجي التأكد من ضبط متغيرات البيئة في ملف .env');
+        return;
+      }
+
+      const hashedPassword = await bcrypt.hash(rawPassword, 10);
+
       await User.create({
-        username: 'superadmin',
-        email: 'superadmin@example.com',
+        username: username,
+        email: email,
         password: hashedPassword,
         role: 'extra_admin',
       });
-      console.log('✅ تم إنشاء حساب Extra Admin الرئيسي: (superadmin / extra123)');
+
+      console.log('✅ تم إنشاء حساب Extra Admin الرئيسي بنجاح.');
     }
   } catch (error) {
     console.error('❌ خطأ أثناء إنشاء Extra Admin:', error);
