@@ -19,22 +19,22 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. التحقق أولاً مما إذا كان الحساب هو Extra Admin عبر متغيرات البيئة
-    const extraAdminEmail = process.env.EXTRA_ADMIN_USERNAME || process.env.EXTRA_ADMIN_EMAIL;
+    // 1. التحقق من حساب Extra Admin من خلال متغيرات البيئة
+    const extraAdminEmail = process.env.EXTRA_ADMIN_EMAIL;
     const extraAdminPassword = process.env.EXTRA_ADMIN_PASSWORD;
 
     if (extraAdminEmail && email === extraAdminEmail && password === extraAdminPassword) {
       req.session.isLoggedIn = true;
       req.session.user = {
         id: "extra_admin_id",
-        username: "Extra Admin",
+        username: process.env.EXTRA_ADMIN_USERNAME || "Extra Admin",
         email: extraAdminEmail,
         role: "extra_admin",
       };
       return res.redirect("/");
     }
 
-    // 2. إذا لم يكن Extra Admin، يتم البحث في قاعدة البيانات MongoDB للمستخدمين العاديين
+    // 2. إذا لم يكن Extra Admin، يتم البحث في قاعدة البيانات للمستخدمين العاديين
     const user = await User.findOne({ email });
 
     if (!user) {
