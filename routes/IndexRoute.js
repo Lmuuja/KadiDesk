@@ -3,6 +3,7 @@ import Customer from '../models/CustomerSchema.js';
 import User from '../models/userSchema.js';
 import moment from 'moment';
 import { isAuth } from '../middleware/auth.js';
+import { isAdminOrExtra } from '../middleware/auth.js';
 
 
 const router = Router(); // 👈 الكود التنفيذي يأتي بعد كل الـ imports

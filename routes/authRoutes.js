@@ -10,12 +10,12 @@ const router = express.Router();
 // ==========================================
 
 // عرض صفحة تسجيل الدخول
-router.get("/login", isAuth, (req, res) => {
+router.get("/login", (req, res) => {
   res.render("auth/login", { currentpage: "login" });
 });
 
 // معالجة بيانات تسجيل الدخول
-router.post("/login", isAuth, async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
