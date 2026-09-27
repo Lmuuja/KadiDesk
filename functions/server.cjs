@@ -1,4 +1,7 @@
 const serverless = require('serverless-http');
-const app = require('../server'); // يربط مع ملف server.js الرئيسي
 
-module.exports.handler = serverless(app);
+module.exports.handler = async (event, context) => {
+  const expressApp = await import('../server.js');
+  const handler = serverless(expressApp.default || expressApp);
+  return handler(event, context);
+};
