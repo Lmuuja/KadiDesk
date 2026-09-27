@@ -36,6 +36,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 
+// الاتصال بقاعدة البيانات Mongoose
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((err) => console.error('MongoDB connection error:', err));
+
 // 3. إعداد الـ Session وتخزينها في MongoDB
 app.use(
   session({

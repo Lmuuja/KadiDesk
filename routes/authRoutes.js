@@ -10,12 +10,12 @@ const router = express.Router();
 // ==========================================
 
 // عرض صفحة تسجيل الدخول
-router.get("/login", (req, res) => {
+router.get("/login", isAuth, (req, res) => {
   res.render("auth/login", { currentpage: "login" });
 });
 
 // معالجة بيانات تسجيل الدخول
-router.post("/login", async (req, res) => {
+router.post("/login", isAuth, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -133,8 +133,8 @@ router.delete("/user/:id", isAuth, isAdminOrExtra, async (req, res) => {
     const targetUserId = req.params.id; // معرّف الحساب المراد حذفه
     const currentUser = req.session.user; // المستعمل الحالي الذي يقوم بعملية الحذف
 
-    // 1. منع المستخدم من حذف حسابه الخاص
-    if (currentUser._id === targetUserId) {
+ // التعديل: استخدام currentUser.id بدلاً من currentUser._id
+    if (currentUser.id === targetUserId || currentUser._id === targetUserId) {
       return res.status(400).send("لا يمكنك حذف حسابك الخاص.");
     }
 

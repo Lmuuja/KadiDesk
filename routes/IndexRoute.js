@@ -22,15 +22,13 @@ router.get("/", isAuth, async (req, res) => {
 
 //-----------------------------------------------------------------
 
-router.get('/users-list', async (req, res) => {
+router.get('/users-list', isAuth, isAdminOrExtra, async (req, res) => {
   try {
-    const users = await User.find();
-
-    // ⚠️ تأكد من كتابة المسار بدون شفرة زائدة وبدون الامتداد ejs
-    res.render('admin/users-list', { users: users }); 
+    // استبعاد كلمة المرور من الاستعلام لزيادة الأمان
+    const users = await User.find().select('-password');
+    res.render('admin/users-list', { users, currentpage: 'usersList' });
   } catch (err) {
-    console.log(err);
-    res.status(500).send("Error loading users");
+    res.status(500).send('خطأ في جلب المستخدمين');
   }
 });
 
