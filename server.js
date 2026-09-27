@@ -3,8 +3,6 @@ import mongoose from 'mongoose';
 import methodOverride from 'method-override';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import livereload from 'livereload';
-import connectLivereload from 'connect-livereload';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import bcrypt from 'bcrypt';
@@ -28,21 +26,10 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// LiveReload Setup
-const liveReloadServer = livereload.createServer();
-liveReloadServer.watch('public');
-
-liveReloadServer.server.once('connection', () => {
-  setTimeout(() => {
-    liveReloadServer.refresh('/');
-  }, 100);
-});
-
-app.use(connectLivereload());
-
-// View Engine & Static Files
+// View Engine & Static Files Configuration
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware استقبال البيانات
 app.use(express.urlencoded({ extended: true }));
@@ -111,16 +98,12 @@ app.use(searchCustRoute);
 app.use(viewCustRoute);
 
 // 7. الاتصال بقاعدة البيانات ثم تشغيل السيرفر
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('Connected to MongoDB successfully!');
-    createInitialExtraAdmin(); // إنشاء حساب Extra Admin عند نجاح الاتصال
-    app.listen(process.env.PORT || 3000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 3000}`);
-    });
-  })
-  .catch((err) => console.error('Connection error:', err));
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
-  module.exports = app;
+export default app;
   
