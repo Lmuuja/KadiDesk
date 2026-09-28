@@ -115,7 +115,7 @@ router.post("/admin/add-admin", isAuth, isExtraAdmin, async (req, res) => {
       email,
       password: hashedPassword,
       role: "admin",
-      createdBy: req.session.user.id,
+      createdBy: req.session?.user?._id || req.user?._id, // استخدام _id المعتمد في MongoDB
     });
 
     res.redirect("/");

@@ -22,7 +22,7 @@ const Cust_Post_Search = async (req, res) => {
     // تنقية النص للـ Regex
     const safeSearchText = escapeRegex(searchText);
 
-    // 2. بناء شرط الاستعلام وتحديد نطاق البحث حسب نوع المستخدم
+    // 2. بناء شرط الاستعلام ليشمل جميع العملاء دون تقييد بـ createdBy
     let query = {
       $or: [
         { firstName: { $regex: safeSearchText, $options: "i" } },
@@ -30,12 +30,7 @@ const Cust_Post_Search = async (req, res) => {
       ]
     };
 
-    // إذا لم يكن المستخدم Extra Admin، يجب تقييد البحث بالعملاء الخصوصيين به فقط
-    if (req.session.user && req.session.user.role !== 'extra_admin') {
-      query.createdBy = req.session.user.id;
-    }
-
-    // 3. التنفيذ في MongoDB
+    // 3. التنفيذ في MongoDB لجميع المستخدمين (extra_admin, admin, user)
     const result = await Customer.find(query);
 
     res.render("customer/search", { customers: result, searchText });
