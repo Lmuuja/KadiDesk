@@ -11,7 +11,7 @@ export const isExtraAdmin = (req, res, next) => {
   if (req.session && req.session.user && req.session.user.role === "extra_admin") {
     return next();
   }
-  res.status(403).send("عذراً، هذه الصفحة خاصة بـ Extra Admin فقط.");
+  res.status(403).send("Sorry, this page is for Extra Admin only.");
 };
 
 // 3. خاص بـ Admins و Extra Admin معاً (لتسيير الموقع وإدارة الـ Users والعملاء)
@@ -23,5 +23,5 @@ export const isAdminOrExtra = (req, res, next) => {
   ) {
     return next();
   }
-  res.status(403).send("عذراً، لا تملك صلاحية التسيير.");
+  res.status(403).send("Sorry, you do not have administrative privileges.");
 };
