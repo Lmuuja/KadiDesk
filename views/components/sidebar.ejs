@@ -15,7 +15,7 @@
     class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
   >
     <i class="bi bi-lightning-charge fs-4 me-2"></i>
-    <span class="fs-4 sidebar-text">Sidebar</span>
+    <span class="fs-4 sidebar-text">KadiDesk</span>
   </a>
   
   <hr />
@@ -25,7 +25,7 @@
     <li class="nav-item">
       <a 
         href="/" 
-        class="nav-link text-white <%= (typeof currentpage !== 'undefined' && currentpage === 'index') ? 'active' : '' %>" 
+        class="nav-link text-white <%= (typeof currentpage !== 'undefined' && (currentpage === 'home' || currentpage === 'index')) ? 'active' : '' %>" 
         aria-current="page"
       >
         <i class="bi bi-house me-2"></i>
@@ -44,17 +44,22 @@
     </li>
 
     <li class="nav-item">
-  <a href="/users-list" class="nav-link text-white <%= currentpage === 'users-list' ? 'active' : '' %>">
-    <i class="bi bi-people me-2"></i>
-    <span class="sidebar-text"> Users List </span>
-  </a>
-</li>
+      <a 
+        href="/users-list" 
+        class="nav-link text-white <%= (typeof currentpage !== 'undefined' && (currentpage === 'users-list' || currentpage === 'usersList')) ? 'active' : '' %>"
+      >
+        <i class="bi bi-people me-2"></i>
+        <span class="sidebar-text"> Users List </span>
+      </a>
+    </li>
 
     <!-- قسم الصلاحيات المخصص حسب المستخدم المسجل -->
-    <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+    <% const loggedUser = (typeof user !== 'undefined' && user) ? user : ((typeof currentUser !== 'undefined' && currentUser) ? currentUser : null); %>
+    
+    <% if (loggedUser) { %>
       
       <!-- إضافة User (متاحة لـ Extra Admin و Admin) -->
-      <% if (currentUser.role === 'extra_admin' || currentUser.role === 'admin') { %>
+      <% if (loggedUser.role === 'extra_admin' || loggedUser.role === 'admin') { %>
         <li class="nav-item mt-2">
           <a 
             href="/admin/add-user" 
@@ -67,7 +72,7 @@
       <% } %>
 
       <!-- إضافة Admin (متاحة فقط لـ Extra Admin) -->
-      <% if (currentUser.role === 'extra_admin') { %>
+      <% if (loggedUser.role === 'extra_admin') { %>
         <li class="nav-item">
           <a 
             href="/admin/add-admin" 
@@ -85,7 +90,7 @@
   <hr />
 
   <!-- القائمة المنسدلة للبروفايل -->
-  <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+  <% if (loggedUser) { %>
     <div class="dropdown">
       <a
         href="#"
@@ -93,19 +98,20 @@
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
+        <!-- استخدام رابط CDN لصورة البروفايل لمنع الاختفاء على Netlify -->
         <img
-          src="/img/user.png"
+          src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(loggedUser.username || 'User') %>&background=0D6EFD&color=fff"
           alt="User Avatar"
           width="28"
           height="28"
           class="rounded-circle me-2"
         />
-        <strong class="sidebar-text"><%= currentUser.username %></strong>
+        <strong class="sidebar-text"><%= loggedUser.username %></strong>
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
         <li>
           <span class="dropdown-item-text text-muted small">
-            Role: <%= currentUser.role %>
+            Role: <%= loggedUser.role %>
           </span>
         </li>
         <li><hr class="dropdown-divider" /></li>
